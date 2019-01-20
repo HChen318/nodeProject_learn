@@ -9,10 +9,14 @@
  const accountRouter = express.Router();
  
 //  导入控制器路由模块
-const accountControler = require(path.join(__dirname,'../controllers/accountController'))
+const accountController = require(path.join(__dirname,'../controllers/accountController'))
 
 // 获取注册页面的请求
-accountRouter.get('/register',accountControler.getRegisterPage)
+accountRouter.get('/register',accountController.getRegisterPage);
+
+
+// 注册信息
+accountRouter.post('/register',accountController.register);
 
 // 导出路由对象
 module.exports = accountRouter;
