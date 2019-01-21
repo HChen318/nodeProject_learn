@@ -154,17 +154,17 @@ exports.login = (req, res) => {
         //     }) 
 
         //查找用户名
-        // collection.findOne({
-        //     username,
-        //     password
-        // }, (err, doc) => {
-        //     if (!doc) {
-        //         result.status = 2,
-        //             result.message = '用户名或密码错误'
-        //     }
-        //     client.close();
-        //     res.json(result);
-        // })
+        collection.findOne({
+            username,
+            password
+        }, (err, doc) => {
+            if (!doc) {
+                result.status = 2,
+                    result.message = '用户名或密码错误'
+            }
+            client.close();
+            res.json(result);
+        })
 
 
 
