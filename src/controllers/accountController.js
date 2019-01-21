@@ -147,13 +147,12 @@ exports.login = (req, res) => {
         const collection = db.collection('accountInfo');
         console.log(username, password);
 
-        //      collection.find({username,password}   
+        //collection.find({username,password}   
         // ).toArray((err, docs) => {
         //         // 如果查询有数据库可以登陆
         //         console.log(docs);
-
-
         //     }) 
+
         //查找用户名
         collection.findOne({
             username,
