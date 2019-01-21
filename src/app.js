@@ -30,11 +30,21 @@ app.use(session({ secret: 'keyboard cat',resave:false,saveUninitialized:false, c
 
 
 
-// 导入account路由
-const accountRouter = require(path.join(__dirname,'./routers/accountRouter'));
+// 导入注册登录路由模块
+const accountRouter = require(path.join(__dirname,'./routers/accountRouter.js'));
 // 这句话给express注入了很多方法
+// 分流
+/**
+ * 参数1：一级路径
+ * 参数2：处理该路径的路由
+ */
 app.use('/account',accountRouter)
 
 
+// 导入学生管理路由模块
+const studentManagerRouter = require(path.join(__dirname,'./routers/studentManagerRouter.js'));
+
+app.use("/studentmanager",studentManagerRouter)
+
 // 监听端口
-app.listen(3000)
+app.listen(3000);

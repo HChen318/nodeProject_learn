@@ -45,10 +45,10 @@
     function register(){
         const username = $('#usernameId').val();
         const password = $.md5($('#passwordId').val().trim()+"!@#");
-        if(password == '50411758798f11294a9c27de6c37b4e9'){
+        if($('#passwordId').val().trim().length == 0){
             alert('密码不能为空');
             return false;
-        }
+        };
         $.post('/account/register',{username,password},function (data) {
             console.log(data);
             if(data.status != 0) {
