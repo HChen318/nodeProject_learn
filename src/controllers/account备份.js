@@ -7,7 +7,14 @@ const path = require('path');
 var captchapng = require('captchapng')
 
 
+// 导入mongodb
+// const MongoClient = require('mongodb').MongoClient;
 
+// // Connection URL
+// const url = 'mongodb://localhost:27017';
+
+// // Database Name
+// const dbName = 'ch';
 
 
 // 导入自定义模块 封装的包
@@ -27,13 +34,12 @@ exports.register = (req, res) => {
         status: 0,
         message: '注册成功'
     }
-
     // 获取用户名结构赋值
     const {
         username,
         password
     } = req.body
-    console.log(username);
+    console.log(req.body);
 
     // 判断用户名是否为空
     if (username == '') {
@@ -42,18 +48,16 @@ exports.register = (req, res) => {
         res.json(result)
         return;
     };
-    console.log(username);
-    
+
     // 先查询后判断
-    databasetool.findSingle('accountInfo',{username},(err,doc) =>{
-         // 如果doc为 == null 没查询到,可以插入 如果查询到了 说明用户名已经存在
-         console.log(doc);
+    databasetool.databasetool('accountInfo',{username},(err,doc) =>{
+         // 如果doc为 == null 没查询到,可以插入
          if (doc) {
             result.status = 1;
             result.message = '用户名已注册'
             res.json(result)
          }else{
-            databasetool.insertSingle('accountInfo',req.body,(err,result2)=>{
+             collection.insertSingle = ('accountInfo',req.body,(err,result2)=>{
                 // 如果result2等于null 就是插入失败
                 if (!result2) {
                     result.status = 2;
@@ -65,6 +69,43 @@ exports.register = (req, res) => {
          }
     })
 
+
+
+  /*   MongoClient.connect(url, {
+        useNewUrlParser: true
+    }, function (err, client) {
+        // 拿到db
+        let db = client.db(dbName);
+        // 获取集合accountInfo
+        let collection = db.collection('accountInfo');
+        // 查询数据库的文档
+        collection.findOne({
+            username
+        }, (err, doc) => {
+            // 如果doc为 == null 没查询到,可以插入
+            if (doc) {
+                result.status = 1;
+                result.message = '用户名已注册'
+                // 关闭数据库
+                client.close();
+                res.json(result)
+            } else {
+                // 如果用户不存在
+                collection.insertOne(
+                    req.body, (err, result2) => {
+                        // 如果result2等于null 就是插入失败
+                        if (!result2) {
+                            result.status = 2;
+                            result.message = '注册失败'
+                        }
+                        // 成功返回数据
+                        res.json(result)
+
+                    }
+                )
+            }
+        })
+    }); */
 }
 
 
@@ -121,9 +162,45 @@ exports.login = (req, res) => {
             result.status = 2,
             result.message = '用户名或密码错误'
         }
-        // console.log(doc);
+        console.log(doc);
         
         res.json(result)
     })
+
+
+
+
+    // console.log(req.body);
+    // 去数据库查询操作  异步请求
+/*     MongoClient.connect(url, {
+        useNewUrlParser: true
+    }, function (err, client) {
+        // 拿到db
+        const db = client.db(dbName);
+        // 获取集合accountInfo
+        const collection = db.collection('accountInfo');
+        console.log(username, password);
+
+        // collection.find({username,password}   
+        // ).toArray((err, docs) => {
+        //         console.log(docs)
+        //         // 如果查询有数据库可以登陆
+        //         console.log(docs);
+        //     }) 
+
+        //查找用户名
+        collection.findOne({
+            username,
+            password
+        }, (err, doc) => {
+            if (!doc) {
+                result.status = 2,
+                    result.message = '用户名或密码错误'
+            }
+            client.close();
+            res.json(result);
+        })
+    }); */
+
 
 }
