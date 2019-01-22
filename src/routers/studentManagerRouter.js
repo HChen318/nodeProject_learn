@@ -14,7 +14,7 @@ studentManagerRouter.get('/list',studentManagerController.getStudentPage)
 //获取新增列表页面
 studentManagerRouter.get('/add',studentManagerController.getStudentAddPage);
 
-//新增学生
+//新增学生信息
 studentManagerRouter.post('/add',studentManagerController.addStudent);
 
 
@@ -25,6 +25,12 @@ studentManagerRouter.get('/edit/:studentId',studentManagerController.getAddEditP
 studentManagerRouter.post('/edit/:studentId',studentManagerController.editStudent)
 // 测试
 // studentManagerRouter.post('/edit',studentManagerController.editStudent)
+
+studentManagerRouter.get('/del/:studentId',studentManagerController.delStudent)
+
+
+// 退出
+studentManagerRouter.get('/loginout',studentManagerController.loginout)
 
 
 

@@ -94,6 +94,37 @@ const updateSingle = (condition,collectionName,data,callback) => {
     })
 }
 
+/**
+ * 
+ * @param {*} collection 要操作的集合
+ * @param {*} data 要删除的数据
+ * @param {*} callback 回调给控制器传参
+ */
+const delStudent = (collectionName,data,callback) => {
+    collection(collectionName,(collection,client) =>{
+        collection.deleteOne(data,(err,result) =>{
+           // 关闭数据库
+           client.close();
+            //回调函数给控制器传参
+           callback(err, result)
+        })
+    })
+}
+
+
+
+// 封装集合那些方法
+const collection = (collectionName,callback) =>{
+    MongoClient.connect(url, {useNewUrlParser: true}, 
+        function (err, client) {
+        const db = client.db(dbName);
+        // 拿到集合
+        const collection = db.collection(collectionName);
+        callback(collection,client)
+    })
+}
+
+
 
 
 
@@ -103,5 +134,6 @@ module.exports = {
     findMany,
     insertSingle,
     ObjectId,
-    updateSingle
+    updateSingle,
+    delStudent
 }

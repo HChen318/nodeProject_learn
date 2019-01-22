@@ -43,7 +43,7 @@
                         <!-- 之前用query传值方式?a=xx,现在用param方式传值接路径 -->
                         <a href="/studentmanager/edit/{{$value._id+''}}" class="btn btn-success">编辑</a> |
 
-                        <input type="button" onclick="" class="btn btn-danger" value="删除">
+                        <input type="button" onclick="delStudent({{$value._id}})" class="btn btn-danger" value="删除">
                     </td>
                 </tr>
             {{/each}}  
@@ -55,6 +55,12 @@
     function search(){
         const studentName = $('#studentNameId').val();
         location = `/studentmanager/list?username=${studentName}`
+    }
+
+    // 删除
+    function delStudent(id){
+        console.log(id);
+        location = `/studentmanager/del/${id}`
     }
 </script>
 {{/block}}

@@ -103,7 +103,6 @@ exports.getAddEditPage = (req,res) =>{
 
 // 修改学生信息
 exports.editStudent = (req,res) =>{
-  
     // console.log(req.body);
     console.log(req.params.studentId);
     
@@ -113,8 +112,7 @@ exports.editStudent = (req,res) =>{
     console.log(_id);
     
     databasetool.updateSingle({_id},'studentInfo',req.body,(err,result) =>{
-        // console.log(result);
-        
+        // console.log(result);       
         if (!result) { //失败
             res.send(`<script>alert("修改失败!")</script>`)
         } else {
@@ -122,4 +120,26 @@ exports.editStudent = (req,res) =>{
         }
     })
     
+};
+
+// 删除学生信息 
+exports.delStudent = (req,res) =>{
+    // 获取id
+    const _id = databasetool.ObjectId(req.params.studentId);
+    // 调用方法
+    databasetool.delStudent('studentInfo',{_id},(err,result) =>{
+        console.log(result);   
+        if (!result) { //失败
+            res.send(`<script>alert("删除失败!")</script>`)
+        } else {
+            res.send(`<script>location.href='/studentmanager/list'</script>`)
+        }
+    }) 
+
+}
+
+// 退出学生系统
+exports.loginout = (req,res) => {
+    req.session.loginName = null;
+    res.send(`<script>location = '/account/login'</script>`)
 }

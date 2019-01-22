@@ -11,7 +11,7 @@ var captchapng = require('captchapng')
 
 
 // 导入自定义模块 封装的包
-const databasetool = require(path.join(__dirname,'../tools/databasetool.js'))
+const databasetool = require(path.join(__dirname, '../tools/databasetool.js'))
 
 
 
@@ -43,17 +43,19 @@ exports.register = (req, res) => {
         return;
     };
     console.log(username);
-    
+
     // 先查询后判断
-    databasetool.findSingle('accountInfo',{username},(err,doc) =>{
-         // 如果doc为 == null 没查询到,可以插入 如果查询到了 说明用户名已经存在
-         console.log(doc);
-         if (doc) {
+    databasetool.findSingle('accountInfo', {
+        username
+    }, (err, doc) => {
+        // 如果doc为 == null 没查询到,可以插入 如果查询到了 说明用户名已经存在
+        console.log(doc);
+        if (doc) {
             result.status = 1;
             result.message = '用户名已注册'
             res.json(result)
-         }else{
-            databasetool.insertSingle('accountInfo',req.body,(err,result2)=>{
+        } else {
+            databasetool.insertSingle('accountInfo', req.body, (err, result2) => {
                 // 如果result2等于null 就是插入失败
                 if (!result2) {
                     result.status = 2;
@@ -61,8 +63,8 @@ exports.register = (req, res) => {
                 }
                 // 成功返回数据
                 res.json(result)
-             })
-         }
+            })
+        }
     })
 
 }
@@ -72,7 +74,6 @@ exports.register = (req, res) => {
 exports.loginPage = (req, res) => {
     res.sendFile(path.join(__dirname, '../public/views/login.html'));
     // console.log(req.session);
-
 }
 
 
@@ -86,7 +87,7 @@ exports.vcode = (req, res) => {
     p.color(0, 0, 0, 0); // First color: background (red, green, blue, alpha)
     p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha)
     var img = p.getBase64();
-    var imgbase64 =  Buffer.from(img, 'base64');
+    var imgbase64 = Buffer.from(img, 'base64');
     res.writeHead(200, {
         'Content-Type': 'image/png'
     });
@@ -113,15 +114,24 @@ exports.login = (req, res) => {
         // 后面的代码不执行
         return;
     }
-    console.log(req.body);
-    
-    databasetool.findSingle('accountInfo',{username,password},(err,doc) =>{
-        if(!doc){
-            result.status = 2,
-            result.message = '用户名或密码错误'
+    // console.log(req.body);
+
+    databasetool.findSingle('accountInfo', {
+        username,
+        password
+    }, (err, doc) => {
+        if (!doc) {
+            result.status = 2;
+            result.message = '用户名或密码错误';
+        } else {
+            // 登录成功后把session储存起来
+            req.session.loginName = username
         }
+
+
         // console.log(doc);
-        
+
         res.json(result)
+
     })
 }

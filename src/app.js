@@ -29,6 +29,27 @@ app.use(express.static(path.join(__dirname,'public')))
 app.use(session({ secret: 'keyboard cat',resave:false,saveUninitialized:false, cookie: { maxAge: 600000 }}))
 
 
+app.all('/*',(req,res,next) =>{
+    // 拦截到所有请求
+    // console.log(next);
+    // console.log(req.url);
+    if(req.url.includes('account')){
+        // next 是允许下一个中间件运行
+        next()
+    }else{
+         console.log(req.url);
+        console.log('11112222');
+        
+        console.log(req.session.loginName);
+        // 判断有没有session username里面有没有值
+        if(req.session.loginName){
+            next()
+        }else{
+            res.send(`<script>alert('请登录账号');location='/account/login'</script>`)
+        }
+    }
+})
+
 
 // 导入注册登录路由模块
 const accountRouter = require(path.join(__dirname,'./routers/accountRouter.js'));
