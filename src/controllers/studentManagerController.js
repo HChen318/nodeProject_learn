@@ -21,7 +21,8 @@ exports.getStudentPage = (req, res) => {
     // 所有字符串都包括空字符串 --------
     const username = req.query.username || '';
     // Use connect method to connect to the server
-
+    // 把session的值存起来
+    loginUser = req.session.loginName;
     databasetool.findMany('studentInfo', {
         name: {
             $regex: username
@@ -29,7 +30,8 @@ exports.getStudentPage = (req, res) => {
     }, (err, docs) => {
         var html = template(path.join(__dirname, '../public/views/list.html'), {
             student: docs,
-            username
+            username,
+            loginUser
         });
         // console.log(html);
         res.send(html)
@@ -64,7 +66,8 @@ exports.getStudentPage = (req, res) => {
 
 // 获取学生新增页面
 exports.getStudentAddPage = (req, res) => {
-    const html = template(path.join(__dirname, "../public/views/add.html"), {})
+    loginUser = req.session.loginName;
+    const html = template(path.join(__dirname, "../public/views/add.html"), {loginUser})
     // console.log(html)
     res.send(html)
 }
@@ -92,10 +95,12 @@ exports.getAddEditPage = (req,res) =>{
     //获取mongodb的id
     const _id = databasetool.ObjectId(req.params.studentId);
     // console.log(_id);
-    
+
     databasetool.findSingle('studentInfo',{_id},(err,doc) =>{
-        // console.log(doc); //没查到数据为null
+        console.log(doc); //没查到数据为null
         // 使用服务端模板渲染
+        // 把session存起来
+        doc.loginUser = req.session.loginName;
         const html = template(path.join(__dirname,'../public/views/edit.html'),doc);
         res.send(html)
     }) 
