@@ -90,7 +90,6 @@ exports.vcode = (req, res) => {
     res.writeHead(200, {
         'Content-Type': 'image/png'
     });
-
     res.end(imgbase64);
 }
 
@@ -125,5 +124,4 @@ exports.login = (req, res) => {
         
         res.json(result)
     })
-
 }
